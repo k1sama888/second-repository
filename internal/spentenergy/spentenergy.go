@@ -1,6 +1,7 @@
 package spentenergy
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -13,17 +14,54 @@ const (
 )
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	if steps <= 0 {
+		return 0, fmt.Errorf("The number of steps must be greater than zero, received: %d", steps)
+	}
+	if weight <= 0 {
+		return 0, fmt.Errorf("The weight must be greater than zero, received: %.2f", weight)
+	}
+	if height <= 0 {
+		return 0, fmt.Errorf("The height must be greater than zero, received: %.2f", height)
+	}
+	if duration <= 0 {
+		return 0, fmt.Errorf("The duration must be greater than zero, received: %v", duration)
+	}
+	speed := MeanSpeed(steps, height, duration)
+	durationInMinutes := duration.Minutes()
+	walkingCalories := ((weight * speed * durationInMinutes) / float64(minInH)) * walkingCaloriesCoefficient
+	return walkingCalories, nil
 }
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	// TODO: реализовать функцию
+	if steps <= 0 {
+		return 0, fmt.Errorf("The number of steps must be greater than zero, received: %d", steps)
+	}
+	if weight <= 0 {
+		return 0, fmt.Errorf("The weight must be greater than zero, received: %.2f", weight)
+	}
+	if height <= 0 {
+		return 0, fmt.Errorf("The height must be greater than zero, received: %.2f", height)
+	}
+	if duration <= 0 {
+		return 0, fmt.Errorf("The duration must be greater than zero, received: %v", duration)
+	}
+	speed := MeanSpeed(steps, height, duration)
+	durationInMinutes := duration.Minutes()
+	runningCalories := (weight * speed * durationInMinutes) / float64(minInH)
+	return runningCalories, nil
 }
 
 func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
-	// TODO: реализовать функцию
+	if duration <= 0 {
+		return 0
+	}
+	distanceKm := Distance(steps, height)
+	durationInHours := duration.Hours()
+	return distanceKm / durationInHours
 }
 
 func Distance(steps int, height float64) float64 {
-	// TODO: реализовать функцию
+	distanceKm := (height * stepLengthCoefficient) * float64(steps) / float64(mInKm)
+	return distanceKm
+
 }
